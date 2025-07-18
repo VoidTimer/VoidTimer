@@ -44,6 +44,50 @@ body {
     0% { opacity: 0.12; filter: blur(1px) drop-shadow(0 0 4px #a259ff); }
     100% { opacity: 0.22; filter: blur(0.5px) drop-shadow(0 0 12px #fff); }
 }
+
+/* Logo Container Styles */
+.logo-container {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 10;
+}
+
+.main-logo {
+    width: 120px;
+    height: auto;
+    filter: drop-shadow(0 0 15px #a259ff) drop-shadow(0 0 30px rgba(162,89,255,0.5));
+    border-radius: 15px;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 1;
+}
+
+.main-logo:hover {
+    transform: scale(1.05);
+    filter: drop-shadow(0 0 25px #fff) drop-shadow(0 0 40px rgba(162,89,255,0.8));
+}
+
+.mini-logo {
+    width: 60px;
+    height: auto;
+    position: absolute;
+    bottom: -8px;
+    right: -8px;
+    z-index: 2;
+    filter: drop-shadow(0 0 10px #a259ff) drop-shadow(0 0 20px rgba(162,89,255,0.6));
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    opacity: 0.9;
+}
+
+.mini-logo:hover {
+    transform: scale(1.1) rotate(5deg);
+    opacity: 1;
+    filter: drop-shadow(0 0 15px #fff) drop-shadow(0 0 25px rgba(162,89,255,0.9));
+    cursor: pointer;
+}
+
 /* #endregion Body & Background Styles */
 
 @media only screen and (min-width: 900px) {
@@ -437,6 +481,48 @@ body {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
+    }
+
+    /* Mobile Logo Container Styles */
+    .logo-container {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        z-index: 10;
+    }
+    
+    .main-logo {
+        width: 80px;
+        height: auto;
+        filter: drop-shadow(0 0 10px #a259ff) drop-shadow(0 0 20px rgba(162,89,255,0.4));
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .main-logo:hover {
+        transform: scale(1.05);
+        filter: drop-shadow(0 0 15px #fff) drop-shadow(0 0 25px rgba(162,89,255,0.6));
+    }
+    
+    .mini-logo {
+        width: 28px;
+        height: auto;
+        position: absolute;
+        bottom: -6px;
+        right: -6px;
+        z-index: 2;
+        filter: drop-shadow(0 0 8px #a259ff) drop-shadow(0 0 15px rgba(162,89,255,0.5));
+        border-radius: 6px;
+        transition: all 0.3s ease;
+        opacity: 0.9;
+    }
+    
+    .mini-logo:hover {
+        transform: scale(1.1) rotate(5deg);
+        opacity: 1;
+        filter: drop-shadow(0 0 12px #fff) drop-shadow(0 0 20px rgba(162,89,255,0.8));
     }
 
     /* #region Countdown Styles */    
