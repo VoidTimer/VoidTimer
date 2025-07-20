@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="Images/Logo.png">
-    <link rel="stylesheet" href="TimerCSS.css?v=1.0">
+    <link rel="stylesheet" href="TimerCSS_new.css?v=1.0">
     <title>VoidTimer</title>
     <style>
         
@@ -13,10 +13,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="magic-mist"></div>
-    <div class="magic-glow" id="magicGlow"></div>
-    <div id="runes"></div>
-    
     <div class="main-container">
         <!-- Logo Container -->
         <div class="logo-container">
@@ -24,7 +20,53 @@
             <a target="_blank" href="https://wibi-studio.com"><img src="Images/Wi.Bi Logo.png" alt="Wi.Bi Logo" class="mini-logo"></a>
         </div>
         
-        <div class="date-picker-container">
+        <!-- Left Section - Title and Button -->
+        <div class="left-section">
+            <h1 class="main-title">VoidTimer</h1>
+            <p class="main-subtitle">Your Time. Your Universe.</p>
+            <button class="change-date-button" onclick="openDatePopup()">Change Date</button>
+        </div>
+        
+        <!-- Right Section - Countdown -->
+        <div class="countdown-section">
+            <div class="countdown-box">
+                <div class="countdown-number" id="days">90</div>
+                <div class="countdown-label">DAYS</div>
+            </div>
+            <div class="countdown-box">
+                <div class="countdown-number" id="hours">3</div>
+                <div class="countdown-label">HOURS</div>
+            </div>
+            <div class="countdown-box">
+                <div class="countdown-number" id="minutes">13</div>
+                <div class="countdown-label">MINUTES</div>
+            </div>
+            <div class="countdown-box">
+                <div class="countdown-number" id="seconds">49</div>
+                <div class="countdown-label">SECONDS</div>
+            </div>
+        </div>
+        
+        <!-- Date Popup Overlay -->
+        <div class="popup-overlay" id="datePopupOverlay">
+            <div class="popup-container">
+                <div class="popup-header">
+                    <h3>Set Your Target Date</h3>
+                    <button class="close-button" onclick="closeDatePopup()">&times;</button>
+                </div>
+                <div class="popup-content">
+                    <input type="date" id="targetDatePicker" class="date-picker">
+                    <div class="popup-buttons">
+                        <button onclick="setCustomDate()" class="popup-button primary">Set Date</button>
+                        <button onclick="resetToDefault()" class="popup-button secondary">Reset to Oct 20</button>
+                    </div>
+                    <div id="dateStatus" class="date-status"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Hidden original elements for compatibility -->
+        <div class="date-picker-container" style="display: none;">
             <h3 class="date-picker-title">Set Your Target Date</h3>
             <input type="date" id="targetDatePicker" class="date-picker">
             <button onclick="setCustomDate()" class="date-button">Set Date</button>
@@ -32,7 +74,7 @@
             <div id="dateStatus" class="date-status"></div>
         </div>
         
-        <div class="countdown-container">
+        <div class="countdown-container" style="display: none;">
             <div class="countdown-title">Countdown</div>
             <div class="countdown" id="countdown">
                 <!-- JS will populate here -->
@@ -128,6 +170,24 @@
             }, 3000);
         }
         
+        // Open date popup
+        function openDatePopup() {
+            document.getElementById('datePopupOverlay').style.display = 'flex';
+        }
+        
+        // Close date popup
+        function closeDatePopup() {
+            document.getElementById('datePopupOverlay').style.display = 'none';
+        }
+        
+        // Close popup when clicking outside
+        window.onclick = function(event) {
+            const popup = document.getElementById('datePopupOverlay');
+            if (event.target === popup) {
+                closeDatePopup();
+            }
+        }
+        
         // Countdown logic (updated to use global targetDate)
         function updateCountdown() {
             const now = new Date();
@@ -136,6 +196,14 @@
             const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
             const minutes = Math.floor((diff / (1000 * 60)) % 60);
             const seconds = Math.floor((diff / 1000) % 60);
+            
+            // Update the new countdown display
+            document.getElementById('days').textContent = days;
+            document.getElementById('hours').textContent = hours;
+            document.getElementById('minutes').textContent = minutes;
+            document.getElementById('seconds').textContent = seconds;
+            
+            // Also update the old countdown for compatibility
             document.getElementById('countdown').innerHTML = `
                 <div class="countdown-segment">
                     <span class="countdown-number">${days}</span>
@@ -162,360 +230,6 @@
             updateCountdown();
         }
 
-        // Magical sparkles
-        function createSparkle() {
-            const sparkle = document.createElement('div');
-            sparkle.className = 'sparkle';
-            const size = Math.random() * 8 + 4;
-            sparkle.style.width = `${size}px`;
-            sparkle.style.height = `${size}px`;
-            sparkle.style.left = `${Math.random() * 100}%`;
-            sparkle.style.top = `${Math.random() * 100}%`;
-            sparkle.style.background = `radial-gradient(circle, #fff 0%, #a259ff 60%, transparent 100%)`;
-            sparkle.style.filter = `blur(${Math.random() * 2}px)`;
-            sparkle.style.animationDuration = `${2 + Math.random() * 2}s`;
-            document.getElementById('magicGlow').appendChild(sparkle);
-            setTimeout(() => sparkle.remove(), 4000);
-        }
-        setInterval(createSparkle, 180);
-
-        // Animated glowing runes
-        const runes = ['\u16B1', '\u16D6', '\u16C1', '\u16B7', '\u16DA', '\u16C7', '\u16CB', '\u16D2', '\u16C4', '\u16C8'];
-        function placeRunes() {
-            const runeContainer = document.getElementById('runes');
-            runeContainer.innerHTML = '';
-            for (let i = 0; i < 8; i++) {
-                const rune = document.createElement('div');
-                rune.className = 'rune';
-                rune.textContent = String.fromCharCode(parseInt(runes[Math.floor(Math.random()*runes.length)].replace('\\u',''),16));
-                rune.style.left = `${10 + Math.random()*80}%`;
-                rune.style.top = `${5 + Math.random()*90}%`;
-                rune.style.fontSize = `${2 + Math.random()*3}rem`;
-                rune.style.transform = `rotate(${Math.random()*360}deg)`;
-                runeContainer.appendChild(rune);
-            }
-        }
-        placeRunes();
-        setInterval(placeRunes, 6000);
-
-        // Background Music Auto-Play
-        function initializeMusic() {
-            const backgroundMusic = document.getElementById('backgroundMusic');
-            backgroundMusic.volume = 0.3; // Set to comfortable volume level
-            
-            // Attempt to play music automatically
-            backgroundMusic.play().catch((error) => {
-                // If autoplay fails (browser policy), try again on first user interaction
-                console.log('Autoplay blocked, will try on first user interaction');
-                document.addEventListener('click', function() {
-                    backgroundMusic.play().catch(() => {
-                        console.log('Music playback failed');
-                    });
-                }, { once: true });
-            });
-        }
-
-        // SMS Weekly Reminder Functionality
-        function subscribeToWeeklyReminders() {
-            const phoneNumber = document.getElementById('phoneNumber').value;
-            const statusDiv = document.getElementById('smsStatus');
-            
-            // Validate phone number
-            if (!phoneNumber || !isValidPhoneNumber(phoneNumber)) {
-                showStatus('Please enter a valid phone number', 'error');
-                return;
-            }
-            
-            // Use the current target date (which can be custom or default)
-            const now = new Date();
-            if (targetDate <= now) {
-                showStatus('Cannot subscribe to reminders for a date that has already passed', 'error');
-                return;
-            }
-            
-            // Calculate next Sunday at 12:00 PM
-            const nextSunday = getNextSunday();
-            
-            // Store subscription in localStorage
-            const subscription = {
-                phoneNumber: phoneNumber,
-                subscribed: true,
-                subscribedDate: now.getTime(),
-                targetDate: targetDate.getTime(),
-                nextReminderDate: nextSunday.getTime()
-            };
-            
-            localStorage.setItem('weeklyReminderSubscription', JSON.stringify(subscription));
-            
-            // Set up the weekly reminder check
-            setupWeeklyReminderCheck();
-            
-            const targetDateStr = targetDate.toLocaleDateString('en-US', { 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric' 
-            });
-            
-            showStatus(`Successfully subscribed! You'll receive weekly updates every Sunday at 12:00 PM until ${targetDateStr}`, 'success');
-            
-            // Send immediate confirmation SMS
-            sendWelcomeSMS(phoneNumber, targetDateStr);
-        }
-        
-        function unsubscribeFromReminders() {
-            const phoneNumber = document.getElementById('phoneNumber').value;
-            
-            if (!phoneNumber || !isValidPhoneNumber(phoneNumber)) {
-                showStatus('Please enter your phone number to unsubscribe', 'error');
-                return;
-            }
-            
-            // Check if subscription exists
-            const subscription = JSON.parse(localStorage.getItem('weeklyReminderSubscription') || 'null');
-            if (!subscription || subscription.phoneNumber !== phoneNumber) {
-                showStatus('No active subscription found for this phone number', 'error');
-                return;
-            }
-            
-            // Remove subscription
-            localStorage.removeItem('weeklyReminderSubscription');
-            showStatus('Successfully unsubscribed from weekly reminders', 'success');
-            
-            // Send unsubscribe confirmation SMS
-            sendUnsubscribeSMS(phoneNumber);
-        }
-        
-        function getNextSunday() {
-            const now = new Date();
-            const nextSunday = new Date(now);
-            const daysUntilSunday = (7 - now.getDay()) % 7;
-            
-            // If today is Sunday and it's before 12 PM, use today
-            if (now.getDay() === 0 && now.getHours() < 12) {
-                nextSunday.setHours(12, 0, 0, 0);
-            } else {
-                // Otherwise, get next Sunday
-                nextSunday.setDate(now.getDate() + (daysUntilSunday === 0 ? 7 : daysUntilSunday));
-                nextSunday.setHours(12, 0, 0, 0);
-            }
-            
-            return nextSunday;
-        }
-        
-        function setupWeeklyReminderCheck() {
-            // Check every hour if it's time to send weekly reminder
-            setInterval(checkWeeklyReminder, 3600000); // Check every hour
-            checkWeeklyReminder(); // Check immediately
-        }
-        
-        function checkWeeklyReminder() {
-            const subscription = JSON.parse(localStorage.getItem('weeklyReminderSubscription') || 'null');
-            if (!subscription || !subscription.subscribed) return;
-            
-            const now = new Date().getTime();
-            const reminderTime = subscription.nextReminderDate;
-            
-            // If it's time for the weekly reminder (within 1 hour window)
-            if (now >= reminderTime && now <= reminderTime + 3600000) {
-                sendWeeklyReminderSMS(subscription);
-                
-                // Schedule next week's reminder
-                const nextWeek = new Date(reminderTime + (7 * 24 * 60 * 60 * 1000));
-                subscription.nextReminderDate = nextWeek.getTime();
-                localStorage.setItem('weeklyReminderSubscription', JSON.stringify(subscription));
-            }
-        }
-        
-        function sendWelcomeSMS(phoneNumber, targetDateStr) {
-            const message = `🎃 Welcome to Wi.Bi Studios Magical Countdown! You'll receive weekly updates every Sunday at 12 PM until ${targetDateStr}. Reply STOP to unsubscribe. ✨`;
-            
-            sendSMSMessage(phoneNumber, message, 'Welcome message sent!');
-        }
-        
-        function sendUnsubscribeSMS(phoneNumber) {
-            const message = `🎃 You've been unsubscribed from Wi.Bi Studios Magical Countdown updates. Thanks for being part of our magical journey! ✨`;
-            
-            sendSMSMessage(phoneNumber, message, 'Unsubscribe confirmation sent!');
-        }
-        
-        function sendWeeklyReminderSMS(subscription) {
-            const targetDate = new Date(subscription.targetDate);
-            const now = new Date();
-            const timeDiff = targetDate - now;
-            
-            const targetDateStr = targetDate.toLocaleDateString('en-US', { 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric' 
-            });
-            
-            // Check if the event has passed
-            if (timeDiff <= 0) {
-                // Event has passed, send final message and unsubscribe
-                const message = `🎃 The magical moment has arrived! ${targetDateStr} is here! Thanks for following our countdown journey. ✨🎉`;
-                sendSMSMessage(subscription.phoneNumber, message, 'Final countdown message sent!');
-                
-                // Auto-unsubscribe after event
-                localStorage.removeItem('weeklyReminderSubscription');
-                return;
-            }
-            
-            const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((timeDiff / (1000 * 60 * 60)) % 24);
-            const weeks = Math.floor(days / 7);
-            const remainingDays = days % 7;
-            
-            let timeLeftMessage;
-            if (weeks > 0) {
-                if (remainingDays > 0) {
-                    timeLeftMessage = `${weeks} week${weeks > 1 ? 's' : ''} and ${remainingDays} day${remainingDays > 1 ? 's' : ''}`;
-                } else {
-                    timeLeftMessage = `${weeks} week${weeks > 1 ? 's' : ''}`;
-                }
-            } else if (days > 0) {
-                timeLeftMessage = `${days} day${days > 1 ? 's' : ''} and ${hours} hour${hours > 1 ? 's' : ''}`;
-            } else {
-                timeLeftMessage = `${hours} hour${hours > 1 ? 's' : ''}`;
-            }
-            
-            const weekNumber = Math.ceil((new Date() - new Date(subscription.subscribedDate)) / (7 * 24 * 60 * 60 * 1000));
-            const message = `🎃 Weekly Countdown Update #${weekNumber}: Only ${timeLeftMessage} left until ${targetDateStr}! The magic is building! ✨ Reply STOP to unsubscribe.`;
-            
-            sendSMSMessage(subscription.phoneNumber, message, 'Weekly reminder sent!');
-        }
-        
-        function sendSMSMessage(phoneNumber, message, successMessage) {
-            // Send SMS via backend
-            fetch('send-sms.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    phoneNumber: phoneNumber,
-                    message: message
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    console.log('SMS sent successfully:', data);
-                    if (successMessage) {
-                        showStatus(successMessage, 'success');
-                    }
-                } else {
-                    console.error('SMS sending failed:', data);
-                    showStatus('Failed to send SMS', 'error');
-                }
-            })
-            .catch(error => {
-                console.error('Error sending SMS:', error);
-                // Fallback: show alert if backend is not available
-                alert(`SMS would be sent to ${phoneNumber}: ${message}`);
-                console.log('SMS Message:', {
-                    to: phoneNumber,
-                    message: message
-                });
-            });
-        }
-        
-        function isValidPhoneNumber(phone) {
-            // Basic phone number validation
-            const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
-            const cleanPhone = phone.replace(/[\s\-\(\)]/g, '');
-            return phoneRegex.test(cleanPhone) && cleanPhone.length >= 10;
-        }
-        
-        function showStatus(message, type) {
-            const statusDiv = document.getElementById('smsStatus');
-            statusDiv.textContent = message;
-            statusDiv.className = `sms-status ${type}`;
-            setTimeout(() => {
-                statusDiv.textContent = '';
-                statusDiv.className = 'sms-status';
-            }, 5000);
-        }
-        
-        function setupReminderCheck() {
-            // Check every minute if it's time to send reminder
-            setInterval(checkReminder, 60000);
-            checkReminder(); // Check immediately
-        }
-        
-        function checkReminder() {
-            const reminder = JSON.parse(localStorage.getItem('smsReminder') || 'null');
-            if (!reminder) return;
-            
-            const now = new Date().getTime();
-            const reminderTime = reminder.reminderTime;
-            
-            // If it's time for the reminder (within 1 minute window)
-            if (now >= reminderTime && now <= reminderTime + 60000) {
-                sendSMSReminder(reminder);
-                // Remove the reminder after sending
-                localStorage.removeItem('smsReminder');
-            }
-        }
-        
-        function sendSMSReminder(reminder) {
-            const targetDate = new Date(reminder.targetDate);
-            const now = new Date();
-            const timeDiff = targetDate - now;
-            
-            const targetDateStr = targetDate.toLocaleDateString('en-US', { 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric' 
-            });
-            
-            const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((timeDiff / (1000 * 60 * 60)) % 24);
-            const minutes = Math.floor((timeDiff / (1000 * 60)) % 60);
-            
-            let timeLeftMessage;
-            if (days > 0) {
-                timeLeftMessage = `${days} day${days > 1 ? 's' : ''}, ${hours} hour${hours > 1 ? 's' : ''} and ${minutes} minute${minutes > 1 ? 's' : ''}`;
-            } else if (hours > 0) {
-                timeLeftMessage = `${hours} hour${hours > 1 ? 's' : ''} and ${minutes} minute${minutes > 1 ? 's' : ''}`;
-            } else {
-                timeLeftMessage = `${minutes} minute${minutes > 1 ? 's' : ''}`;
-            }
-            
-            const message = `🎃 Magical Countdown Reminder! Only ${timeLeftMessage} left until ${targetDateStr}! ✨`;
-            
-            // Send SMS via backend
-            fetch('send-sms.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    phoneNumber: reminder.phoneNumber,
-                    message: message
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    console.log('SMS sent successfully:', data);
-                    showStatus('SMS reminder sent successfully!', 'success');
-                } else {
-                    console.error('SMS sending failed:', data);
-                    showStatus('Failed to send SMS reminder', 'error');
-                }
-            })
-            .catch(error => {
-                console.error('Error sending SMS:', error);
-                // Fallback: show alert if backend is not available
-                alert(`SMS would be sent to ${reminder.phoneNumber}: ${message}`);
-                console.log('SMS Reminder:', {
-                    to: reminder.phoneNumber,
-                    message: message,
-                    timeLeft: timeLeftMessage
-                });
-            });
-        }
-        
         // Check for existing weekly subscription on page load
         window.onload = function() {
             // Initialize custom date picker FIRST
@@ -523,20 +237,6 @@
             
             // Initialize countdown AFTER date is loaded
             initializeCountdown();
-            
-            // Initialize music system
-            initializeMusic();
-            
-            // Handle existing subscription
-            const subscription = JSON.parse(localStorage.getItem('weeklyReminderSubscription') || 'null');
-            if (subscription && subscription.subscribed) {
-                setupWeeklyReminderCheck();
-                const nextReminderDate = new Date(subscription.nextReminderDate);
-                if (nextReminderDate > new Date()) {
-                    document.getElementById('phoneNumber').value = subscription.phoneNumber;
-                    showStatus(`Subscribed to weekly updates! Next reminder: ${nextReminderDate.toLocaleDateString()} at ${nextReminderDate.toLocaleTimeString()}`, 'info');
-                }
-            }
         };
     </script>
 </body>
