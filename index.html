@@ -58,7 +58,7 @@
                     <input type="date" id="targetDatePicker" class="date-picker">
                     <div class="popup-buttons">
                         <button onclick="setCustomDate()" class="popup-button primary">Set Date</button>
-                        <button onclick="resetToDefault()" class="popup-button secondary">Reset to Oct 20</button>
+                        <button onclick="resetToDefault()" class="popup-button secondary">Reset to Jan 1</button>
                     </div>
                     <div id="dateStatus" class="date-status"></div>
                 </div>
@@ -70,7 +70,7 @@
             <h3 class="date-picker-title">Set Your Target Date</h3>
             <input type="date" id="targetDatePicker" class="date-picker">
             <button onclick="setCustomDate()" class="date-button">Set Date</button>
-            <button onclick="resetToDefault()" class="date-button date-button-secondary">Reset to Oct 20</button>
+            <button onclick="resetToDefault()" class="date-button date-button-secondary">Reset to Jan 1</button>
             <div id="dateStatus" class="date-status"></div>
         </div>
         
@@ -83,7 +83,7 @@
     </div>
     <script>
         // Global variable to store the target date
-        let targetDate = new Date(new Date().getFullYear(), 9, 20, 0, 0, 0, 0); // Default: October 20th
+        let targetDate = new Date(new Date().getFullYear() + 1, 0, 1, 0, 0, 0, 0); // Default: January 1st of next year
         
         // Load custom date from localStorage on page load
         function loadCustomDate() {
@@ -98,15 +98,8 @@
                 // Update countdown immediately to reflect the loaded date
                 updateCountdown();
             } else {
-                // Check if default October 20th has passed this year
-                const now = new Date();
-                const currentYear = now.getFullYear();
-                const defaultDate = new Date(currentYear, 9, 20, 0, 0, 0, 0);
-                
-                // If October 20th has passed this year, set it for next year
-                if (now > defaultDate) {
-                    targetDate = new Date(currentYear + 1, 9, 20, 0, 0, 0, 0);
-                }
+                // Use default date: January 1st of next year
+                targetDate = new Date(new Date().getFullYear() + 1, 0, 1, 0, 0, 0, 0);
                 
                 console.log('Using default date:', targetDate);
                 // Set default date in the date picker
@@ -139,21 +132,12 @@
             updateCountdown();
         }
         
-        // Reset to default October 20th date
+        // Reset to default January 1st of next year
         function resetToDefault() {
-            const currentYear = new Date().getFullYear();
-            const defaultDate = new Date(currentYear, 9, 20, 0, 0, 0, 0);
-            const now = new Date();
-            
-            // If October 20th has passed this year, set it for next year
-            if (now > defaultDate) {
-                defaultDate.setFullYear(currentYear + 1);
-            }
-            
-            targetDate = defaultDate;
+            targetDate = new Date(new Date().getFullYear() + 1, 0, 1, 0, 0, 0, 0);
             document.getElementById('targetDatePicker').value = targetDate.toISOString().split('T')[0];
             localStorage.removeItem('customTargetDate');
-            showDateStatus('Reset to default October 20th date', 'success');
+            showDateStatus('Reset to default January 1st of next year', 'success');
             
             // Update countdown immediately
             updateCountdown();
